@@ -17,7 +17,7 @@ public class LoginUserRequest {
     @Size(max = 100)
     private String username;
 
-    @NotBlank(message = "Username is required")
+    @NotBlank(message = "Password is required")
     @Size(max = 100)
     private String password;
 }
