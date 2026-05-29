@@ -1,8 +1,8 @@
 package com.rizalamar.financetracker.controller;
 
-import com.rizalamar.financetracker.model.LoginUserRequest;
-import com.rizalamar.financetracker.model.RegisterUserRequest;
-import com.rizalamar.financetracker.model.TokenResponse;
+import com.rizalamar.financetracker.model.auth.LoginUserRequest;
+import com.rizalamar.financetracker.model.auth.RegisterUserRequest;
+import com.rizalamar.financetracker.model.auth.TokenResponse;
 import com.rizalamar.financetracker.model.WebResponse;
 import com.rizalamar.financetracker.service.AuthService;
 import lombok.RequiredArgsConstructor;

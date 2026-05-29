@@ -1,9 +1,9 @@
 package com.rizalamar.financetracker.service;
 
 import com.rizalamar.financetracker.entity.User;
-import com.rizalamar.financetracker.model.LoginUserRequest;
-import com.rizalamar.financetracker.model.RegisterUserRequest;
-import com.rizalamar.financetracker.model.TokenResponse;
+import com.rizalamar.financetracker.model.auth.LoginUserRequest;
+import com.rizalamar.financetracker.model.auth.RegisterUserRequest;
+import com.rizalamar.financetracker.model.auth.TokenResponse;
 import com.rizalamar.financetracker.repository.UserRepository;
 import com.rizalamar.financetracker.security.JwtUtil;
 import com.rizalamar.financetracker.utils.PasswordUtil;

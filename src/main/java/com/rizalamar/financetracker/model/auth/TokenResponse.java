@@ -1,4 +1,4 @@
-package com.rizalamar.financetracker.model;
+package com.rizalamar.financetracker.model.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
