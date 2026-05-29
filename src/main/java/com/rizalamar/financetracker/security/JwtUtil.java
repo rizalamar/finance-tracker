@@ -42,7 +42,7 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token) {
-        try{
+        try {
             Jwts.parser()
                     .verifyWith(getSigningKey())
                     .build()
