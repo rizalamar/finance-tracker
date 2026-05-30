@@ -42,7 +42,7 @@ public class AuthService {
 
         // 1. find the user
         User user = userRepository.findFirstByUsername(request.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password wrong"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
 
         boolean checkedPassword = PasswordUtil.checkPassword(request.getPassword(), user.getPassword());
 

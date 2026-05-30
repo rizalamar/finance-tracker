@@ -2,6 +2,7 @@ package com.rizalamar.financetracker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rizalamar.financetracker.entity.User;
+import com.rizalamar.financetracker.model.auth.LoginUserRequest;
 import com.rizalamar.financetracker.model.auth.RegisterUserRequest;
 import com.rizalamar.financetracker.repository.TransactionRepository;
 import com.rizalamar.financetracker.repository.UserRepository;
@@ -126,6 +127,74 @@ class AuthControllerTest {
     }
 
     @Test
-    void login() {
+    void loginSuccess() throws Exception {
+        User user = new User();
+        user.setName("Test User");
+        user.setUsername("testuser");
+        user.setPassword(PasswordUtil.hashPassword("testuser123"));
+        userRepository.saveAndFlush(user);
+
+        LoginUserRequest request = new LoginUserRequest();
+        request.setUsername("testuser");
+        request.setPassword("testuser123");
+
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(
+                post("/api/auth/login")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson)
+        )
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.data.token").isNotEmpty()
+                );
+    }
+
+    @Test
+    void loginWrongPassword() throws Exception {
+        User user = new User();
+        user.setName("Test User");
+        user.setUsername("testuser");
+        user.setPassword(PasswordUtil.hashPassword("testuser123"));
+        userRepository.save(user);
+
+        LoginUserRequest request = new LoginUserRequest();
+        request.setUsername("testuser");
+        request.setPassword("testuser111");
+
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(
+                post("/api/auth/login")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson)
+        )
+                .andExpectAll(
+                        status().isUnauthorized(),
+                        jsonPath("$.message").value("401 UNAUTHORIZED \"Username or password wrong\"")
+                );
+    }
+
+    @Test
+    void loginUserNotFound() throws Exception{
+        LoginUserRequest request = new LoginUserRequest();
+        request.setUsername("testuser");
+        request.setPassword("testuser123");
+
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(
+                        post("/api/auth/login")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestJson)
+                )
+                .andExpectAll(
+                        status().isUnauthorized(),
+                        jsonPath("$.message").value("401 UNAUTHORIZED \"User not found\"")
+                );
     }
 }
