@@ -1,5 +1,6 @@
 package com.rizalamar.financetracker.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,12 @@ public class SecurityConfig {
                         .requestMatchers("/api-docs/**", "/swagger-ui/**").permitAll() // and swagger
                         .anyRequest().authenticated() // others uses token
                 )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"data\": null, \"message\": \"401 UNAUTHORIZED \\\"Unauthorized\\\" \"}");
+                        })))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
