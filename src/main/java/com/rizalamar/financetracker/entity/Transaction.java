@@ -28,10 +28,10 @@ public class Transaction {
     private LocalDateTime date;
 
     @ManyToOne
-    @JoinColumn(name = "wallet_id", referencedColumnName = "id")
+    @JoinColumn(name = "wallet_id", referencedColumnName = "id", nullable = false)
     private Wallet wallet;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
 }
