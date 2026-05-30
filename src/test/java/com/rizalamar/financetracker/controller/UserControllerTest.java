@@ -3,11 +3,13 @@ package com.rizalamar.financetracker.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rizalamar.financetracker.entity.User;
 import com.rizalamar.financetracker.model.auth.LoginUserRequest;
+import com.rizalamar.financetracker.model.user.UpdateUserResquest;
 import com.rizalamar.financetracker.repository.TransactionRepository;
 import com.rizalamar.financetracker.repository.UserRepository;
 import com.rizalamar.financetracker.repository.WalletRepository;
 import com.rizalamar.financetracker.security.JwtUtil;
 import com.rizalamar.financetracker.utils.PasswordUtil;
+import io.swagger.v3.core.util.Json;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +85,63 @@ class UserControllerTest {
                 )
                 .andExpectAll(
                         status().isForbidden()
+                );
+    }
+
+    @Test
+    void getCurrentUserInvalidToken() throws Exception {
+        mockMvc.perform(
+                        get("/api/users/current")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer token-salah")
+                )
+                .andExpectAll(
+                        status().isUnauthorized()
+                );
+    }
+
+    @Test
+    void updateCurrentUserName() throws Exception {
+        String token = jwtUtil.generateToken("testuser");
+
+        UpdateUserResquest request = new UpdateUserResquest();
+        request.setName("New Test User");
+        request.setPassword("testuser");
+
+        String requestJson = objectMapper.writeValueAsString(request);
+
+                mockMvc.perform(
+                        patch("/api/users/current")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer "  + token)
+                                .content(requestJson)
+                )
+                        .andExpectAll(
+                                status().isOk()
+                        );
+    }
+
+    @Test
+    void updateCurrentUserPassword() throws Exception {
+        String token = jwtUtil.generateToken("testuser");
+
+        UpdateUserResquest request = new UpdateUserResquest();
+        request.setName("Test User");
+        request.setPassword("testuser1234");
+
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(
+                        patch("/api/users/current")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer "  + token)
+                                .content(requestJson)
+                )
+                .andExpectAll(
+                        status().isOk()
                 );
     }
 }
