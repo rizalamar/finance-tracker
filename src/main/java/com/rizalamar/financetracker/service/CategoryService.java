@@ -22,7 +22,6 @@ import java.util.UUID;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final ValidationService validationService;
-    private final UserDetailsManager userDetailsManager;
 
 
     public CategoryResponse toCategoryResponse(Category category) {
@@ -37,18 +36,17 @@ public class CategoryService {
     public CategoryResponse create(User user, CreateCategoryRequest request) {
         validationService.validate(request);
 
-        Category category = new Category();
-        category.setName(request.getName());
-        category.setCategoryType(request.getCategoryType());
-        category.setUser(user);
-
-        categoryRepository.save(category);
-
         boolean isNameExists = categoryRepository.existsByUserAndName(user, request.getName());
 
         if(isNameExists){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category name already exists");
         }
+
+        Category category = new Category();
+        category.setName(request.getName());
+        category.setCategoryType(request.getCategoryType());
+        category.setUser(user);
+        categoryRepository.save(category);
 
         return toCategoryResponse(category);
     }
