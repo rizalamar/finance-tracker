@@ -128,7 +128,8 @@ class WalletControllerTest {
         )
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.data").isArray()
+                        jsonPath("$.data").isArray(),
+                        jsonPath("$.data.length()").value(2)
                 );
     }
 
