@@ -24,4 +24,9 @@ public class Category {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private CategoryType categoryType;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
 }
