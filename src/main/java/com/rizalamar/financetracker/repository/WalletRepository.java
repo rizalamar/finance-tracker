@@ -5,10 +5,12 @@ import com.rizalamar.financetracker.entity.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet, UUID> {
     Optional<Wallet> findFirstByUserAndId(User user, UUID id);
+    List<Wallet> findAllByUser(User user);
 }
