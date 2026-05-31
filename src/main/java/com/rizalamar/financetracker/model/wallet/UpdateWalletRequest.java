@@ -17,7 +17,4 @@ public class UpdateWalletRequest {
     @NotBlank(message = "Name of wallet is required.")
     @Size(max = 100, message = "Maximum name is 100 characters")
     private String name;
-
-    @NotNull(message = "Balance is required")
-    private Long balance;
 }
